@@ -1,0 +1,28 @@
+{
+  "platform": "macOS 15.7.1 arm64",
+  "cangjie_sdk": {
+    "version": "1.0.0",
+    "sha256": "e8cdf8570678d116b99186411da94a425f2febc5eee84624a98a5be7df03158d"
+  },
+  "cangjie_stdx": {
+    "version": "1.0.0.1",
+    "sha256": "0e8344c4d2b039b4540fbcb61497d9fb8eb163bff87b72b4285063aea11525f6"
+  },
+  "python": "3.14.7",
+  "python_packages": "requirements.lock",
+  "docling_layout_model": {
+    "repository": "ds4sd/docling-layout-heron",
+    "revision": "8f39ad3c0b4c58e9c2d2c84a38465abf757272d8"
+  },
+  "docling_table_model": {
+    "repository": "ds4sd/docling-models",
+    "tag": "v2.3.0",
+    "observed_commit": "fc0f2d45e2218ea24bce5045f58a389aed16dc23"
+  },
+  "ocr": "ocrmac 1.0.1 / Apple Vision / zh-Hans,en-US",
+  "doc_converter": {
+    "name": "LibreOfficeDev",
+    "version": "26.8.0.0.alpha0",
+    "build": "2c87e51eeaa2b413ff4ae097b2705eea1995d8e5"
+  }
+}

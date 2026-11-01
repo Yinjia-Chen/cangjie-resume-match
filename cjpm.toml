@@ -1,0 +1,8 @@
+[package]
+name = "resume_match"
+version = "0.1.0"
+cjc-version = "1.0.0"
+output-type = "executable"
+
+[target.aarch64-apple-darwin.bin-dependencies]
+path-option = [".tools/stdx/darwin_aarch64_llvm/dynamic/stdx"]
