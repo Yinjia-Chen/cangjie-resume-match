@@ -27,7 +27,9 @@ else
     export LD_LIBRARY_PATH="$RESUME_MATCH_STDX_DIR:$CANGJIE_HOME/runtime/lib/$_resume_platform:$CANGJIE_HOME/tools/lib:${LD_LIBRARY_PATH:-}"
 fi
 if [ -z "${SOFFICE_BIN:-}" ]; then
-    if command -v soffice >/dev/null 2>&1; then
+    if [ -x "$RESUME_MATCH_ROOT/.tools/libreoffice/LibreOffice.app/Contents/MacOS/soffice" ]; then
+        export SOFFICE_BIN="$RESUME_MATCH_ROOT/.tools/libreoffice/LibreOffice.app/Contents/MacOS/soffice"
+    elif command -v soffice >/dev/null 2>&1; then
         export SOFFICE_BIN="$(command -v soffice)"
     elif [ -x /Applications/LibreOffice.app/Contents/MacOS/soffice ]; then
         export SOFFICE_BIN=/Applications/LibreOffice.app/Contents/MacOS/soffice

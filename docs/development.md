@@ -40,11 +40,10 @@ xcode-select --install
 
 ```bash
 brew install libffi uv
-brew install --cask libreoffice
 uv python install 3.14.7
 ```
 
-如果已有 LibreOffice，可直接复用，或通过 `SOFFICE_BIN` 指向可执行文件。解析工作不依赖 Codex 自带的运行环境。
+Mac 未找到 LibreOffice 时，setup 会从官方归档下载并校验固定版本 **26.8.2.2**，安装到 `.tools/libreoffice/`，不写入系统应用目录。已有 LibreOffice 可直接复用，或用 `SOFFICE_BIN` 指定；需要固定版本时执行 `python3.14 scripts/setup.py --install-libreoffice`。解析工作不依赖 Codex 自带的运行环境。
 
 ### Windows
 
@@ -87,9 +86,9 @@ uv run --no-project --python 3.14.7 python scripts/setup.py
 python3.14 scripts/setup.py
 ```
 
-安装过程包括 SDK 下载、stdx 构建、创建 `.venv`、安装锁定依赖和 `pip check`。需要能访问仓颉官网、GitHub/PyPI；Linux 还需要 PyTorch CPU wheel 源。SDK 下载超过 200 MB，首次 Python 及模型安装也需要预留网络和磁盘空间。
+安装过程包括 SDK 下载、stdx 构建、创建 `.venv`、安装锁定依赖和 `pip check`。需要能访问仓颉官网、GitHub/PyPI；Linux 还需要 PyTorch CPU wheel 源。SDK 下载超过 200 MB，Mac 的 LibreOffice 镜像约 285 MB；首次 Python 及模型安装也需要预留网络和磁盘空间。
 
-安装脚本不会自动执行 sudo 或安装操作系统软件。若现有 `.venv` 的 Python 版本不一致，先重命名旧目录再重建；不要跨操作系统复制 `.venv` 或 `.tools`。
+安装脚本不会自动执行 sudo；Linux 的系统依赖仍需按前述命令安装。若现有 `.venv` 的 Python 版本不一致，先重命名旧目录再重建；不要跨操作系统复制 `.venv` 或 `.tools`。
 
 ## 3 配置当前终端并验证
 

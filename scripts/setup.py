@@ -55,6 +55,34 @@ def in_environment(*args):
     run("bash", "-c", 'source "$1/scripts/env.sh" && shift && "$@"', "setup", ROOT, *args)
 
 
+def install_mac_converter(force=False):
+    app = ROOT / ".tools/libreoffice/LibreOffice.app"
+    binary = app / "Contents/MacOS/soffice"
+    if binary.is_file():
+        return
+    if not force and (os.environ.get("SOFFICE_BIN") or shutil.which("soffice")
+                      or Path("/Applications/LibreOffice.app/Contents/MacOS/soffice").is_file()):
+        print("Using existing LibreOffice; --install-libreoffice installs the pinned project-local copy")
+        return
+    config = LOCK["libreoffice_mac"]
+    archive = download(config["url"], config["sha256"], config["filename"])
+    with tempfile.TemporaryDirectory(dir=ROOT / ".tools", prefix="libreoffice-install-") as temp:
+        mount = Path(temp) / "mount"
+        mount.mkdir()
+        run("hdiutil", "attach", "-readonly", "-nobrowse", "-mountpoint", mount, archive)
+        try:
+            staged = Path(temp) / "LibreOffice.app"
+            run("ditto", mount / "LibreOffice.app", staged)
+            if not (staged / "Contents/MacOS/soffice").is_file():
+                raise SystemExit("LibreOffice image has an unexpected layout")
+            app.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(staged, app)
+        finally:
+            run("hdiutil", "detach", mount)
+    run("xattr", "-dr", "com.apple.quarantine", app)
+    run(binary, "--version")
+
+
 def install_core(key, force_stdx):
     config = LOCK["supported_platforms"][key]
     tools = ROOT / ".tools"
@@ -129,6 +157,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--core-only", action="store_true", help="Install SDK/stdx only; no venv or model dependencies")
     parser.add_argument("--rebuild-stdx", action="store_true", help="Rebuild the required stdx packages from pinned source")
+    parser.add_argument("--install-libreoffice", action="store_true", help="On Mac, install the pinned project-local converter even if a system copy exists")
     args = parser.parse_args()
     key = host_key()
     if sys.version.split()[0] != LOCK["python"]:
@@ -138,6 +167,8 @@ def main():
             raise SystemExit(f"Missing {tool}; install system prerequisites in docs/development.md")
     install_core(key, args.rebuild_stdx)
     if not args.core_only:
+        if key.startswith("mac-"):
+            install_mac_converter(args.install_libreoffice)
         python = ROOT / ".venv/bin/python"
         if not python.exists():
             run(sys.executable, "-m", "venv", ROOT / ".venv")

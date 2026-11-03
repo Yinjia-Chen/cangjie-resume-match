@@ -54,7 +54,6 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install libffi
-          brew install --cask libreoffice
       - name: Cache compiler and models
         uses: actions/cache@v4
         with:

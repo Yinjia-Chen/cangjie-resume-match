@@ -51,5 +51,11 @@
       "stdx_directory": "linux_aarch64_llvm"
     }
   },
-  "ocr_linux": "Tesseract CLI / chi_sim,eng (system packages)"
+  "ocr_linux": "Tesseract CLI / chi_sim,eng (system packages)",
+  "libreoffice_mac": {
+    "version": "26.8.2.2",
+    "filename": "LibreOffice_26.8.2.2_MacOS_aarch64.dmg",
+    "url": "https://downloadarchive.documentfoundation.org/libreoffice/old/26.8.2.2/mac/aarch64/LibreOffice_26.8.2.2_MacOS_aarch64.dmg",
+    "sha256": "9f24fe83ab1ed5c95eb3df580119f32932f713e577feeac02bf619fb00749b55"
+  }
 }
