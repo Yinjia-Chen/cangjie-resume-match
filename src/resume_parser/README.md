@@ -2,6 +2,8 @@
 
 仓颉 `parseResume` 负责扩展名分流、独立工作目录、LibreOffice 转换、Docling 子进程调用、JSON 读取及结构化校验。Python 只解码文档，不承担业务抽取。
 
+OCR 按平台选择：Mac 默认使用 Apple Vision / ocrmac，Linux 和 Windows WSL2 默认使用 Tesseract CLI（需安装 `eng`、`chi_sim` 语言数据）。可用 `RESUME_MATCH_OCR=tesseract` 显式选择；不同引擎结果可能不同，输出文档中的 `ocr_engine` 记录所选引擎。安装、环境检查与四格式回归见 [开发环境指南](../../docs/development.md)。
+
 - 支持 `.pdf`、`.docx`、`.doc`、`.png/.jpg/.jpeg/.tif/.tiff/.bmp`；不支持的格式直接失败，扩展名不是内容真实性校验。
 - 每次调用传入新的绝对 scratch 路径；失败返回非零退出码，不能继续当成有效简历。子进程等待上限 300 秒。
 - `document.json` 保存文本片段、Docling 引用、段落序号及可获得的页码/bbox；段落序号是解析阅读顺序，不是 Word 原生段落索引。表格单元格保留表格级位置。

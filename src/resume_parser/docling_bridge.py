@@ -1,20 +1,38 @@
 """Local document decoding only; no resume semantics or remote inference."""
 import argparse
 import json
+import os
+import platform
 import sys
 from pathlib import Path
 
 
+def ocr_options(image: bool = False):
+    """Use native OCR on Mac and Tesseract CLI on Linux/WSL2."""
+    from docling.datamodel.pipeline_options import OcrMacOptions, TesseractCliOcrOptions
+
+    engine = os.environ.get("RESUME_MATCH_OCR", "auto")
+    if engine == "auto":
+        engine = "ocrmac" if platform.system() == "Darwin" else "tesseract"
+    if engine == "ocrmac":
+        if platform.system() != "Darwin":
+            raise ValueError("ocrmac requires macOS; use RESUME_MATCH_OCR=tesseract")
+        return OcrMacOptions(force_full_page_ocr=image, lang=["zh-Hans", "en-US"])
+    if engine == "tesseract":
+        return TesseractCliOcrOptions(force_full_page_ocr=image, lang=["chi_sim", "eng"])
+    raise ValueError(f"Unsupported RESUME_MATCH_OCR: {engine}")
+
+
 def decode(path: Path, image: bool = False) -> dict:
     from docling.datamodel.base_models import InputFormat
-    from docling.datamodel.pipeline_options import PdfPipelineOptions, OcrMacOptions
+    from docling.datamodel.pipeline_options import PdfPipelineOptions
     from docling.document_converter import DocumentConverter, PdfFormatOption
 
     options = PdfPipelineOptions()
     options.do_ocr = True
     options.layout_options.model_spec = options.layout_options.model_spec.model_copy(
         update={"revision": "8f39ad3c0b4c58e9c2d2c84a38465abf757272d8"})
-    options.ocr_options = OcrMacOptions(force_full_page_ocr=image, lang=["zh-Hans", "en-US"])
+    options.ocr_options = ocr_options(image)
     converter = DocumentConverter(format_options={
         InputFormat.PDF: PdfFormatOption(pipeline_options=options),
         InputFormat.IMAGE: PdfFormatOption(pipeline_options=options),
@@ -40,7 +58,8 @@ def decode(path: Path, image: bool = False) -> dict:
     if not segments:
         raise ValueError("No text recovered; manual review required")
     return {"schema_version": "0.1", "status": "parsed_requires_review",
-            "source": str(path), "segments": segments, "docling": document}
+            "source": str(path), "segments": segments, "docling": document,
+            "ocr_engine": options.ocr_options.kind}
 
 
 def main() -> int:

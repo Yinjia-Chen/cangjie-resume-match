@@ -6,3 +6,9 @@ output-type = "executable"
 
 [target.aarch64-apple-darwin.bin-dependencies]
 path-option = [".tools/stdx/darwin_aarch64_llvm/dynamic/stdx"]
+
+[target.x86_64-unknown-linux-gnu.bin-dependencies]
+path-option = [".tools/stdx/linux_x86_64_llvm/dynamic/stdx"]
+
+[target.aarch64-unknown-linux-gnu.bin-dependencies]
+path-option = [".tools/stdx/linux_aarch64_llvm/dynamic/stdx"]

@@ -1,0 +1,76 @@
+name: Development environment
+
+on:
+  push:
+    paths:
+      - '.github/workflows/development-environment.yml'
+      - 'scripts/**'
+      - 'src/**'
+      - 'validation/**'
+      - 'cjpm.*'
+      - 'requirements.lock'
+      - 'toolchain.lock.json'
+      - '.python-version'
+  pull_request:
+    paths:
+      - '.github/workflows/development-environment.yml'
+      - 'scripts/**'
+      - 'src/**'
+      - 'validation/**'
+      - 'cjpm.*'
+      - 'requirements.lock'
+      - 'toolchain.lock.json'
+      - '.python-version'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: '2'
+      TOKENIZERS_PARALLELISM: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+          cache: pip
+      - name: Linux system dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libffi-dev libssl-dev libreoffice-writer \
+            tesseract-ocr tesseract-ocr-eng tesseract-ocr-chi-sim fonts-dejavu-core
+      - name: Mac system dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew install libffi
+          brew install --cask libreoffice
+      - name: Cache compiler and models
+        uses: actions/cache@v4
+        with:
+          path: |
+            .tools/cangjie
+            .tools/stdx
+            .tools/downloads
+            ~/.cache/huggingface
+          key: dev-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('toolchain.lock.json', 'scripts/setup.py') }}
+      - name: Install pinned development environment
+        run: python scripts/setup.py
+      - name: Build and verify four document formats
+        run: bash scripts/check.sh --full
+      - name: Save validation results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-${{ runner.os }}-${{ runner.arch }}
+          path: validation/output/results.json
+          if-no-files-found: ignore

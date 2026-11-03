@@ -3,6 +3,8 @@
 日期：2026-11-01（Asia/Shanghai）。机器：macOS 15.7.1（24G231）、Apple Silicon arm64。
 仅使用本地生成的合成样例，无真实简历或大模型 API 调用。
 
+**新机器安装入口：** 本文保留第一阶段历史记录；当前安装与验证统一使用 [开发环境指南](development.md)。当前工程不需要安装或构建 Magic。Linux/WSL2 使用 Tesseract CLI，当前所需 stdx 包可由固定源码构建。
+
 **第二步更新：**下文 Magic 测试是第一步历史记录；当前已弃用 Magic，已从活动版本锁移除，不依赖 `lib-macro_magic`。当前方案见 [第二步实现说明](matching-implementation.md)。
 
 ## 结论
@@ -68,7 +70,7 @@ target/release/bin/main /absolute/resume.docx /absolute/new-scratch "$PWD/.venv/
 
 输出为 scratch 下的 `resume.json`，退出码 0 只表示文档解析及骨架序列化成功；业务字段仍未知、总状态仍为 `needs_review`。损坏文件、无文本、工具失败或抽取校验异常均不可当作成功结果。OCR 质量尚无自动评分，默认人工复核。
 
-新机器需先准备上述 SDK/stdx/Python 和 `soffice`，用 `python3.14 -m venv .venv`、`.venv/bin/pip install -r requirements.lock` 重建 Python 环境。SDK 官网下载包与 stdx 官方 release 的校验值在 lock 文件中；Magic 源码应 checkout 上述固定 commit 后构建，当前机器预期仍有宏库阻断。
+新机器按 [开发环境指南](development.md) 安装，不需要重现上述 Magic 历史验证。SDK 与 stdx 源码下载和校验、依赖安装由 `scripts/setup.py` 处理，完整回归使用 `bash scripts/check.sh --full`。
 
 ## 依据
 

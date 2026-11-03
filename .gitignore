@@ -3,3 +3,7 @@
 target/
 __pycache__/
 validation/output/
+.env
+.env.*
+!.env.example
+.DS_Store

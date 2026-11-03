@@ -1,11 +1,15 @@
 """Run after sourcing SDK envsetup and setting DYLD_LIBRARY_PATH (see report)."""
 import json
+import os
 import shutil
 import subprocess
 import tempfile
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
+soffice = os.environ.get("SOFFICE_BIN") or shutil.which("soffice")
+if not soffice:
+    raise SystemExit("LibreOffice not found: set SOFFICE_BIN or install soffice (docs/development.md)")
 results = []
 for ext in ("docx", "pdf", "png", "doc"):
     with tempfile.TemporaryDirectory(prefix="resume-verify-") as temp:
@@ -13,7 +17,7 @@ for ext in ("docx", "pdf", "png", "doc"):
         command = [str(root / "target/release/bin/main"),
                    str(root / f"validation/output/sample.{ext}"), str(scratch),
                    str(root / ".venv/bin/python"),
-                   str(root / "src/resume_parser/docling_bridge.py"), shutil.which("soffice")]
+                   str(root / "src/resume_parser/docling_bridge.py"), soffice]
         result = subprocess.run(command, capture_output=True, text=True, timeout=360)
         assert result.returncode == 0, result.stdout + result.stderr
         payload = json.loads((scratch / "resume.json").read_text())

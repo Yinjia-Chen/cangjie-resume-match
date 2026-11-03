@@ -6,7 +6,16 @@
   },
   "cangjie_stdx": {
     "version": "1.0.0.1",
-    "sha256": "0e8344c4d2b039b4540fbcb61497d9fb8eb163bff87b72b4285063aea11525f6"
+    "sha256": "0e8344c4d2b039b4540fbcb61497d9fb8eb163bff87b72b4285063aea11525f6",
+    "source": {
+      "revision": "1b3a36675d6817c7c972d8326d397c18bbebe8f7",
+      "url": "https://codeload.github.com/cangjielanguage/cangjie_stdx/tar.gz/1b3a36675d6817c7c972d8326d397c18bbebe8f7",
+      "sha256": "944f04e145a310bc50ebbba85f4b34d8aabc7d8d7c5065c27f248adb8ee8774b",
+      "packages": [
+        "stdx.serialization.serialization",
+        "stdx.encoding.json"
+      ]
+    }
   },
   "python": "3.14.7",
   "python_packages": "requirements.lock",
@@ -24,5 +33,23 @@
     "name": "LibreOfficeDev",
     "version": "26.8.0.0.alpha0",
     "build": "2c87e51eeaa2b413ff4ae097b2705eea1995d8e5"
-  }
+  },
+  "supported_platforms": {
+    "mac-aarch64": {
+      "sdk_url": "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=cangjie-sdk-mac-aarch64-1.0.0.tar.gz&objectKey=68637e5c3bcda926055851d9",
+      "sdk_sha256": "e8cdf8570678d116b99186411da94a425f2febc5eee84624a98a5be7df03158d",
+      "stdx_directory": "darwin_aarch64_llvm"
+    },
+    "linux-x64": {
+      "sdk_url": "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=cangjie-sdk-linux-x64-1.0.0.tar.gz&objectKey=68637fc53bcda926055851db",
+      "sdk_sha256": "8894e63a181bc0534af24263b449c2d8d4d9dfb16ff1270b793499fe06ce6dcf",
+      "stdx_directory": "linux_x86_64_llvm"
+    },
+    "linux-aarch64": {
+      "sdk_url": "https://cangjie-lang.cn/v1/files/auth/downLoad?nsId=142267&fileName=cangjie-sdk-linux-aarch64-1.0.0.tar.gz&objectKey=68637e793bcda926055851da",
+      "sdk_sha256": "2da22ab90c302155658f7f554aa33b5f4de7870949cc79cb44c9ebf20b83793a",
+      "stdx_directory": "linux_aarch64_llvm"
+    }
+  },
+  "ocr_linux": "Tesseract CLI / chi_sim,eng (system packages)"
 }
