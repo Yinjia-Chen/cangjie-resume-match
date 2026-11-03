@@ -27,6 +27,7 @@
 
 ## 文档与数据
 
+- [毕业设计报告文档](docs/reports/README.md)：任务书、开题报告及后续报告。
 - [完整技术方案](docs/technical-solution.md)
 - [第二步实现与验证](docs/matching-implementation.md)
 - [样例输入说明](data/README.md)
