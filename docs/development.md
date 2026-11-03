@@ -152,6 +152,13 @@ target/release/bin/main /absolute/resume.pdf /absolute/new-scratch \
 
 大模型 API 及网页服务配置待功能接入时再定义。密钥放在本地未跟踪配置或服务端环境变量，不写进报告、源码或 Git。不要把本项目后续服务的“尚未实现”误诊为开发环境安装失败。
 
+## 环境验证记录（2026-11-03）
+
+- [GitHub Actions 完整验证](https://github.com/Yinjia-Chen/cangjie-resume-match/actions/runs/41572869254)：`macos-14` ARM64 与 `ubuntu-24.04` x86_64 均通过。runner 通过仓库脚本下载 SDK、从固定源码构建所需 stdx、安装 Python 依赖及首次下载模型，然后运行同一套 `--full` 检查；Mac 使用项目内固定版 LibreOffice，Linux 使用 apt 安装的 LibreOffice/Tesseract。
+- 两个平台均通过 48 项岗位/匹配断言、解析契约检查、5 项 OCR 配置测试，以及 DOCX、文本 PDF、PNG OCR、旧 DOC 四格式实际解析。
+- 本机 Mac 在独立源码目录重新创建 `.venv`、从固定源码构建 stdx 后通过完整检查；该次复用了已校验 SDK 和全局模型缓存。另一次使用项目内固定版 LibreOffice，通过 `HF_HUB_OFFLINE=1` 完整回归。
+- WSL2 目标机器、Linux aarch64 尚未实际验收；须在目标环境运行 `bash scripts/check.sh --full`。以上是合成样例的环境与功能回归，不是真实简历准确率或人工筛选对比结果。
+
 ## 官方资料
 
 - [仓颉 1.0.0 下载与校验](https://cangjie-lang.cn/download/1.0.0)
