@@ -43,6 +43,7 @@ jobs:
         with:
           python-version-file: .python-version
           cache: pip
+          cache-dependency-path: requirements.lock
       - name: Linux system dependencies
         if: runner.os == 'Linux'
         run: |
